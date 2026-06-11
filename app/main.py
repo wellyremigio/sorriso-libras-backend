@@ -11,3 +11,10 @@ def read_root():
     return {
         "message": "API Sorriso libras funcionando!"
     }
+    
+    
+@app.get("/health")
+def health_check():
+    return {
+        "status": "ok"
+    }
