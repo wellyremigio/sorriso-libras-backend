@@ -1,9 +1,21 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from app.core.config import get_settings
+from app.database.mongodb import close_mongo_connection, connect_to_mongo
+
+settings = get_settings()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await connect_to_mongo()
+    yield
+    await close_mongo_connection()
 
 app = FastAPI(
     title="Sorriso Libras API",
     description="API do aplicativo Sorriso Libras",
     version= "1.0.0",
+    lifespan=lifespan
 )
 
 @app.get("/")
