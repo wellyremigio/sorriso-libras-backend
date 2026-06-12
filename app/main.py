@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from app.core.config import get_settings
 from app.database.mongodb import close_mongo_connection, connect_to_mongo
 from app.routes.video_routes import router as video_router
+from app.routes.sticker_routes import router as sticker_router
 
 settings = get_settings()
 
@@ -20,6 +21,7 @@ app = FastAPI(
 )
 
 app.include_router(video_router)
+app.include_router(sticker_router)
 
 @app.get("/")
 def read_root():
