@@ -71,7 +71,10 @@ class VideoRepository:
         if not ObjectId.is_valid(video_id):
             return None
 
-        update_data = video_data.model_dump(exclude_unset=True)
+        update_data = video_data.model_dump(
+            exclude_unset=True,
+            exclude_none=True
+            )
 
         if not update_data:
             return await self.find_by_id(video_id)

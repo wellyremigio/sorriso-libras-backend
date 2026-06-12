@@ -22,7 +22,6 @@ class VideoService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Vídeo não encontrado.",
             )
-
         return video
 
     async def get_videos_by_module(self, module: str) -> list[dict]:
