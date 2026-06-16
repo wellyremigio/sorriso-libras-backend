@@ -14,7 +14,6 @@ class VideoRepository:
             "title": video["title"],
             "description": video.get("description"),
             "module": video["module"],
-            "category": video["category"],
             "video_url": video["video_url"],
             "thumbnail_url": video.get("thumbnail_url"),
             "order": video.get("order", 0),

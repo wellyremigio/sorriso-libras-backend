@@ -4,7 +4,6 @@ class VideoBase(BaseModel):
     title: str = Field(..., min_length=3, max_length=100)
     description: str | None = Field(default=None, max_length=500)
     module: str = Field(..., pattern="^(children|dentist)$")
-    category: str = Field(..., min_length=2, max_length=50)
     video_url: str
     thumbnail_url: str | None = None
     order: int = Field(default=0, ge=0)
@@ -16,7 +15,6 @@ class VideoUpdate(BaseModel):
     title: str | None = Field(default=None, min_length=3, max_length=100)
     description: str | None = Field(default=None, max_length=500)
     module: str | None = Field(default=None, pattern="^(children|dentist)$")
-    category: str | None = Field(default=None, min_length=2, max_length=50)
     video_url: str | None = None
     thumbnail_url: str | None = None
     order: int | None = Field(default=None, ge=0)
