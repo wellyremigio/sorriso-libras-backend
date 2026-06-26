@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.database.mongodb import close_mongo_connection, connect_to_mongo
 from app.routes.video_routes import router as video_router
@@ -19,6 +20,14 @@ app = FastAPI(
     description="API do aplicativo Sorriso Libras",
     version= "1.0.0",
     lifespan=lifespan
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(video_router)
