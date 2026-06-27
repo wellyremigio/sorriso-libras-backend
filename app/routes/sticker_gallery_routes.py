@@ -5,6 +5,7 @@ from app.database.mongodb import get_database
 from app.schemas.sticker_gallery_schema import (
     CompleteVideoResponse,
     EarnedStickerResponse,
+    CompletedVideoResponse
 )
 from app.services.sticker_gallery_services import StickerGalleryService
 
@@ -32,7 +33,16 @@ async def complete_video(
         child_id=child_id,
         video_id=video_id,
     )
-
+    
+@router.get(
+    "/{child_id}/completed-videos",
+    response_model=list[CompletedVideoResponse],
+)
+async def get_child_completed_videos(
+    child_id: str,
+    service: StickerGalleryService = Depends(get_sticker_gallery_service),
+):
+    return await service.get_child_completed_videos(child_id)
 
 @router.get(
     "/{child_id}/stickers",

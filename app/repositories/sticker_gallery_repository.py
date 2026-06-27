@@ -67,6 +67,58 @@ class StickerGalleryRepository:
             }
         )
 
+    @staticmethod
+    def serialize_completed_video(video: dict, completed_video: dict) -> dict:
+        completed_at = completed_video.get("completed_at")
+
+        return {
+            "id": str(video["_id"]),
+            "title": video["title"],
+            "description": video.get("description"),
+            "module": video["module"],
+            "video_url": video["video_url"],
+            "thumbnail_url": video.get("thumbnail_url"),
+            "order": video.get("order", 0),
+            "is_active": video.get("is_active", True),
+            "completed_at": completed_at.isoformat() if completed_at else "",
+        }
+
+    async def find_child_completed_videos(self, child_id: str) -> list[dict]:
+        cursor = self.completed_videos_collection.find(
+            {
+                "child_id": child_id,
+            }
+        ).sort("completed_at", -1)
+
+        completed_videos = await cursor.to_list(length=200)
+        result = []
+
+        for completed_video in completed_videos:
+            video_id = completed_video.get("video_id")
+
+            if isinstance(video_id, str):
+                if not ObjectId.is_valid(video_id):
+                    continue
+                video_object_id = ObjectId(video_id)
+            else:
+                video_object_id = video_id
+
+            video = await self.videos_collection.find_one(
+                {
+                    "_id": video_object_id,
+                }
+            )
+
+            if video:
+                result.append(
+                    self.serialize_completed_video(
+                        video=video,
+                        completed_video=completed_video,
+                    )
+                )
+
+        return result
+
     async def find_sticker_for_video(self, video_id: str) -> dict | None:
         return await self.stickers_collection.find_one(
             {

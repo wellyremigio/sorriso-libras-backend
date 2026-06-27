@@ -88,3 +88,6 @@ class StickerGalleryService:
 
     async def get_child_sticker_gallery(self, child_id: str) -> list[dict]:
         return await self.repository.find_child_stickers(child_id)
+    
+    async def get_child_completed_videos(self, child_id: str) -> list[dict]:
+        return await self.repository.find_child_completed_videos(child_id)
