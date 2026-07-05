@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.database.mongodb import close_mongo_connection, connect_to_mongo
+from app.routes.brushing_goal_routes import router as brushing_goal_router
 from app.routes.video_routes import router as video_router
 from app.routes.sticker_routes import router as sticker_router
 from app.routes.sticker_gallery_routes import router as sticker_gallery_router
@@ -33,6 +34,7 @@ app.add_middleware(
 app.include_router(video_router)
 app.include_router(sticker_router)
 app.include_router(sticker_gallery_router)
+app.include_router(brushing_goal_router)
 
 @app.get("/")
 def read_root():

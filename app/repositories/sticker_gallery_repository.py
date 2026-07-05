@@ -24,6 +24,7 @@ class StickerGalleryRepository:
             "unlock_condition": sticker["unlock_condition"],
             "video_id": sticker.get("video_id"),
             "is_special": sticker.get("is_special", False),
+            "is_active": sticker.get("is_active", True),
             "earned_at": earned_at.isoformat() if earned_at else "",
             "earned_reason": earned_sticker.get("earned_reason", ""),
             "earned_from_video_id": (
@@ -227,3 +228,11 @@ class StickerGalleryRepository:
                 )
 
         return result
+    
+    async def find_weekly_brushing_goal_sticker(self) -> dict | None:
+        return await self.stickers_collection.find_one(
+            {
+                "unlock_condition": "weekly_brushing_goal",
+                "is_active": True,
+            }
+        )
