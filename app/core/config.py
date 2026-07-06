@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     project_name: str = "Sorriso Libras API"
-    mongodb_url: str = "teste"
+    mongodb_uri: str = ""
     database_name: str = "sorriso_libras_db"
     
     model_config = SettingsConfigDict (
@@ -13,4 +13,9 @@ class Settings(BaseSettings):
     
 @lru_cache
 def get_settings () -> Settings:
-    return Settings()
+    settings = Settings()
+
+    if not settings.mongodb_uri:
+        raise RuntimeError("MONGODB_URI não foi configurada.")
+
+    return settings

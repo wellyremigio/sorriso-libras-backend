@@ -10,7 +10,7 @@ database: AsyncDatabase | None = None
 async def connect_to_mongo () -> None:
     global client, database
     
-    client = AsyncMongoClient(settings.mongodb_url)
+    client = AsyncMongoClient(settings.mongodb_uri)
     database = client[settings.database_name]
     
     await database.command("ping")
