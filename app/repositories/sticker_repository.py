@@ -17,6 +17,8 @@ class StickerRepository:
             "module": sticker["module"],
             "image_url": sticker["image_url"],
             "unlock_condition": sticker["unlock_condition"],
+            "video_id": sticker.get("video_id"),
+            "is_special": sticker.get("is_special", False),
             "order": sticker.get("order", 0),
             "is_active": sticker.get("is_active", True),
         }
@@ -26,10 +28,8 @@ class StickerRepository:
 
         result = await self.collection.insert_one(sticker_dict)
 
-        created_sticker = await self.collection.find_one(
-            {"_id": result.inserted_id}
-        )
-        
+        created_sticker = await self.collection.find_one({"_id": result.inserted_id})
+
         assert created_sticker is not None, "Failed to retrieve inserted video"
 
         return self._serialize_sticker(created_sticker)
@@ -89,9 +89,7 @@ class StickerRepository:
             {"$set": update_data},
         )
 
-        updated_sticker = await self.collection.find_one(
-            {"_id": ObjectId(sticker_id)}
-        )
+        updated_sticker = await self.collection.find_one({"_id": ObjectId(sticker_id)})
 
         if updated_sticker is None:
             return None
