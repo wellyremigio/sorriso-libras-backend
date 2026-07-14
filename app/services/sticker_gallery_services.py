@@ -47,20 +47,13 @@ class StickerGalleryService:
                 if earned_video_sticker:
                     earned_stickers.append(earned_video_sticker)
 
-        total_module_videos = await self.repository.count_active_videos_by_module(
+        last_module_video = await self.repository.find_last_active_video_by_module(
             video["module"]
         )
 
-        completed_module_videos = (
-            await self.repository.count_completed_videos_by_module(
-                child_id=child_id,
-                module=video["module"],
-            )
-        )
-
         module_completed = (
-            total_module_videos > 0
-            and completed_module_videos >= total_module_videos
+            last_module_video is not None
+            and video.get("order", 0) >= last_module_video.get("order", 0)
         )
 
         if module_completed:

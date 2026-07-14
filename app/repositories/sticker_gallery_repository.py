@@ -137,6 +137,15 @@ class StickerGalleryRepository:
             }
         )
 
+    async def find_last_active_video_by_module(self, module: str) -> dict | None:
+        return await self.videos_collection.find_one(
+            {
+                "module": module,
+                "is_active": True,
+            },
+            sort=[("order", -1), ("_id", -1)],
+        )
+
     async def count_completed_videos_by_module(
         self,
         child_id: str,
